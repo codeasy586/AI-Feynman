@@ -131,8 +131,8 @@ def NN_train(pathdir, filename, epochs=1000, lrs=1e-2, N_red_lr=4, pretrained_pa
                         fct = data[0].float()
                         prd = data[1].float()
                     
-                    loss = rmse_loss(model_feynman(fct),prd)
-                    loss.backward()
+                    loss = rmse_loss(model_feynman(fct),prd).cpu()
+                    loss.cpu().backward()
                     optimizer_feynman.step()
 
                 # Early stopping
