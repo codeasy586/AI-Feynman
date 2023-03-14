@@ -97,8 +97,9 @@ def RPN_to_pytorch(data, math_expr, lr = 1e-2, N_epochs = 500):
     for i in range(N_epochs):
         # this order is fixed i.e. first parameters
         yy = f(*input)
-        loss = torch.mean((yy-y)**2).detach().cpu().numpy()
-        loss.detach().cpu().numpy().backward()
+        loss = torch.mean((yy-y)**2)
+        loss = loss.cpu()
+        loss.backward()
         with torch.no_grad():
             for j in range(N_params-1):
                 trainable_parameters[j] -= lr * trainable_parameters[j].grad
