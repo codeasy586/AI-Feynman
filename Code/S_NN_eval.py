@@ -35,9 +35,12 @@ class MultDataset(data.Dataset):
 
 def rmse_loss(pred, targ):
     denom = targ**2
-    denom = torch.sqrt(denom.sum()/len(denom)).detach().cpu().numpy()
+    denom = torch.sqrt(denom.sum()/len(denom))
+    denom = denom.cpu()
+    to_return = torch.sqrt(F.mse_loss(pred, targ))
+    to_return  = to_return.cpu()
 
-    return torch.sqrt(F.mse_loss(pred, targ)).detach().cpu().numpy()/denom
+    return to_return/denom
 
 
 def NN_eval(pathdir,filename):
@@ -111,7 +114,7 @@ def NN_eval(pathdir,filename):
                     
         model.load_state_dict(torch.load("results/NN_trained_models/models/"+filename+".h5"))
         model.eval()
-        return(rmse_loss(model(factors_val),product_val).detach().cpu().numpy())
+        return(rmse_loss(model(factors_val),product_val))
 
     except Exception as e:
         print(e)
