@@ -132,13 +132,12 @@ def NN_train(pathdir, filename, epochs=1000, lrs=1e-2, N_red_lr=4, pretrained_pa
                         prd = data[1].float()
                     
                     loss = rmse_loss(model_feynman(fct),prd)
-                    loss = loss.cpu()
                     loss.backward()
-                    optimizer_feynman.cpu().step()
+                    optimizer_feynman.step()
 
                 # Early stopping
                 if epoch%20==0 and epoch>0:
-                    if check_es_loss.cpu() < loss:
+                    if check_es_loss < loss:
                         break
                     else:
                         torch.save(model_feynman.state_dict(), "results/NN_trained_models/models/" + filename + ".h5")
@@ -148,7 +147,7 @@ def NN_train(pathdir, filename, epochs=1000, lrs=1e-2, N_red_lr=4, pretrained_pa
                         torch.save(model_feynman.state_dict(), "results/NN_trained_models/models/" + filename + ".h5")
                         check_es_loss = loss
         
-            print(loss)
+            print(loss.cpu().detach().numpy())
             lrs = lrs/10
 
         return 1
