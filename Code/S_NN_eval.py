@@ -114,7 +114,7 @@ def NN_eval(pathdir,filename):
                     
         model.load_state_dict(torch.load("results/NN_trained_models/models/"+filename+".h5"))
         model.eval()
-        return(rmse_loss(model(factors_val).cpu().detach().numpy(),product_val.cpu().detach().numpy()))
+        return(rmse_loss(model(factors_val.cpu().detach().numpy()),product_val.cpu().detach().numpy()))
 
     except Exception as e:
         print(e)
